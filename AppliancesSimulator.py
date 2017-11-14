@@ -33,3 +33,7 @@ with open('appliances.csv', newline='') as csvfile:
     dataReader = csv.reader(csvfile, delimiter='\t', quotechar='|')
     for data in dataReader:
         print(', '.join(data))
+
+with open('output.csv','w',newline='') as csvfile:
+    dataWriter = csv.writer(csvfile,delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+    dataWriter.writerow(['Hello World'])
