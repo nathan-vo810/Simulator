@@ -1,3 +1,5 @@
+import csv
+
 class Generator(object):
     # Constructor
     def __init__(self, name):
@@ -8,9 +10,8 @@ class Generator(object):
         print("Hello, %s" % self.name)
 
 
-a = Generator('Anh')
+a = Generator('TV')
 a.greet()
-
 
 def TVGenerator(x):
     if x > 0:
@@ -27,3 +28,8 @@ occupants = 3
 
 print(TVGenerator(occupants))
 print(FridgeGenerator(occupants))
+
+with open('appliances.csv', newline='') as csvfile:
+    dataReader = csv.reader(csvfile, delimiter='\t', quotechar='|')
+    for data in dataReader:
+        print(', '.join(data))
