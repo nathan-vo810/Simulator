@@ -1,4 +1,6 @@
 import csv
+import numpy as np
+import matplotlib.pyplot as plt
 
 class Generator(object):
     # Constructor
@@ -37,3 +39,10 @@ with open('appliances.csv', newline='') as csvfile:
 with open('output.csv','w',newline='') as csvfile:
     dataWriter = csv.writer(csvfile,delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
     dataWriter.writerow(['Hello World'])
+
+#Compute the x and y coordinates for points on a sine curve
+x = np.arange(0,3*np.pi, 0.1)
+y = np.sin(x)
+#Plot the points using matplotlib
+plt.plot(x,y)
+plt.show()
