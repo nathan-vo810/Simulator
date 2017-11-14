@@ -45,4 +45,7 @@ x = np.arange(0,3*np.pi, 0.1)
 y = np.sin(x)
 #Plot the points using matplotlib
 plt.plot(x,y)
+plt.xlabel('x')
+plt.ylabel('y')
+plt.legend(['Sine function'])
 plt.show()
