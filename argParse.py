@@ -1,13 +1,12 @@
 import argparse
-from random import randint
 
+import Plotter
 import const
 from Appliance import WashingMachine
+from DataWriter import DataWriter
+from OccupancyModel import OccupancyModel
+from Output import Output
 from input import Input
-
-
-def generateOccupancyModel(occupants):
-    return randint(0, occupants)
 
 
 if __name__ == "__main__":
@@ -37,11 +36,22 @@ if __name__ == "__main__":
     input = Input(args.o, args.wk, args.m, const.Const.DEFAULT_INTERVAL_TIME)
 
     # Check input
-    print(input)
+    # print(input)
 
-    # Dummy get the number of people at home at specific time interval
-    occupancyModel = [generateOccupancyModel(input.occupantNumber) for i in range(const.Const.DEFAULT_ARRAY_LENGTH)]
-
+    # Dummy get the number of people at home at specific time interval (Need MarkovChain or something else someday)
+    occupancyModel = OccupancyModel(input.occupantNumber)
 
     # Dummy implement for only washing machine
     washingMachine = WashingMachine(input.occupantNumber, const.Const.WASHING_MACHINE_NAME)
+
+    # Simulate energy consumption of washing machine
+    outputEnergyConsumption = Output(occupancyModel.__getattribute__('occupancyModel'), washingMachine)
+
+    # print('Output Energy Consumption :')
+    # print(outputEnergyConsumption.__getattribute__('output'))
+
+    # Write output to the file csv
+    DataWriter.writeCsvFile(outputEnergyConsumption.__getattribute__('output'))
+
+    #Plot the simulate data
+    Plotter.plot('output.csv', 0)

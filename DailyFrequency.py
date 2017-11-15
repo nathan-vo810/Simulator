@@ -17,4 +17,5 @@ def generateDailyFrequency(applianceName):
 class DailyFrequency:
     def __init__(self, applianceName):
         self.dailyUsingFrequency = generateDailyFrequency(applianceName)
-        print(self.dailyUsingFrequency)
+        # print("Daily Using Frequency: ")
+        # print(self.dailyUsingFrequency)
