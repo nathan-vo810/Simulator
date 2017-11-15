@@ -1,0 +1,9 @@
+class Const:
+    DEFAULT_OCCUPANTS = 1
+    DEFAULT_MONTH = 1
+    DEFAULT_INTERVAL_TIME = 10
+    DEFAULT_ARRAY_LENGTH = 144
+    WASHING_MACHINE_NAME = 'washing_machine'
+    ACTIVITY_STATS_FILE_LOCATION = 'activityStatsModified.csv'
+    WASHING_MACHINE_CYCLE_FILENAME = 'WashingMachineCycle.csv'
+
