@@ -2,6 +2,7 @@ import argparse
 
 import Plotter
 import const
+from time import gmtime, strftime
 from Appliance import WashingMachine
 from DataWriter import DataWriter
 from OccupancyModel import OccupancyModel
@@ -51,7 +52,10 @@ if __name__ == "__main__":
     # print(outputEnergyConsumption.__getattribute__('output'))
 
     # Write output to the file csv
-    DataWriter.writeCsvFile(outputEnergyConsumption.__getattribute__('output'))
+    currentDateTime = strftime("%Y_%m_%dT%H_%M_%S", gmtime())
+    DataWriter.writeCsvFile(outputEnergyConsumption.__getattribute__('output'),currentDateTime)
+
+    fileName = currentDateTime + '.csv'
 
     #Plot the simulate data
-    Plotter.plot('output.csv', 0)
+    Plotter.plot(fileName, 0)
