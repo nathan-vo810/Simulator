@@ -8,7 +8,7 @@ import os
 x = np.arange(0, 1439, 1)
 eachMinuteConsumption = []
 
-filePath = "C:\\Users\\ngpbh\\PycharmProjects\\Simulator - Copy\\each-appliance-ec\\kettle\\"
+filePath = "D:\\Senior Year\\Project\\household 1\\01_plugs_csv\\01\\04\\"
 
 weekendWinter = "weekend-winter\\"
 weekendSummer = "weekend-summer\\"
@@ -23,7 +23,7 @@ for seasonAndDate in classifySeasonAndDate:
     fileName = allWeekendFiles[numpy.random.randint(0, allWeekendFiles.__len__())]
     fileurl = filePath + seasonAndDate + fileName
     print("Invetigating ", fileurl, "...")
-    outputUrl = fileurl[88:98] + "-1min-interval.csv"
+    outputUrl = fileurl[filePath.__len__():filePath.__len__()+14] + "-1min-interval.csv"
     with open(fileurl, newline='') as csvfile:
         dataReader = csv.reader(csvfile, delimiter=',')
         next(dataReader)
@@ -40,6 +40,8 @@ for seasonAndDate in classifySeasonAndDate:
     print("Creating in 1 min interval: ", fileurl, "...")
     with open(outputUrl, "w") as output:
         writer = csv.writer(output, lineterminator='\n')
+        # Add the last minute data - 1440
+        eachMinuteConsumption.append(0)
         for val in eachMinuteConsumption:
             writer.writerow([val])
     eachMinuteConsumption.clear()
