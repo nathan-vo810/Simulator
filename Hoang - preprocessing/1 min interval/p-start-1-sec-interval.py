@@ -9,7 +9,7 @@ x = np.arange(0, 86399, 1)
 counter = 0
 data2 = []
 
-filePath = "C:\\Users\\ngpbh\Desktop\Project\household1\\01_plugs_csv\\01\\04\\weekend-winter\\"
+filePath = "/Users/NhatAnh/Downloads/01/04/weekend-winter/"
 
 allWeekendFiles = os.listdir(filePath)
 

@@ -9,7 +9,7 @@ counter = 0
 dataTotal = []
 data2 = []
 
-filePath = ".\\"
+filePath = "./"
 
 allWeekendFiles = os.listdir(filePath)
 
