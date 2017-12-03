@@ -7,7 +7,7 @@ from sklearn.preprocessing import normalize
 class NeuronLayer():
     def __init__(self, number_of_neurons, number_of_inputs_per_neuron):
      #   self.synaptic_weights = 2 * random.random((number_of_inputs_per_neuron + 1, number_of_neurons )) - 1
-        self.synaptic_weights = 0.001* random.random((number_of_inputs_per_neuron + 1, number_of_neurons)) * np.sqrt(2/(number_of_inputs_per_neuron+number_of_neurons))
+        self.synaptic_weights = random.random((number_of_inputs_per_neuron + 1, number_of_neurons)) * np.sqrt(2/(number_of_inputs_per_neuron))
 
 class NeuralNetwork():
     def __init__(self, layer1, layer2):
@@ -19,14 +19,14 @@ class NeuralNetwork():
     # normalise them between 0 and 1.
     def __sigmoid(self, x):
         #return 1 / (1 + exp(-x))
-        x[x<0] = 0
+        x[x<0] *= 0.01
         return x
     # The derivative of the Sigmoid function.
     # This is the gradient of the Sigmoid curve.
     # It indicates how confident we are about the existing weight.
     def __sigmoid_derivative(self, x):
         #return x * (1 - x)
-        x[x<=0] = 0
+        x[x<=0] = 0.01
         x[x>0] = 1
         return x
     # We train the neural network through a process of trial and error.
@@ -74,17 +74,17 @@ if __name__ == "__main__":
     Pstart = []
 
     labels = []
-    with open('D:\Senior Year\Project\Simulator\Kettle\Kettle\weekend\Winter\p-start-daily.csv', newline='') as csvfile:
+    with open('/Users/NhatAnh/Documents/Study/4th Year/Project/Simulator/Hoang - preprocessing/1 min interval/p-start-daily.csv', newline='') as csvfile:
         dataReader = csv.reader(csvfile, delimiter=';')
         for data in dataReader:
             Pstart = np.append(Pstart, [float(i) for i in data])
-    with open('D:\Senior Year\Project\Simulator\Hoang - preprocessing\\1 min interval\weekday-summer-avg-1min-energyconsumption.csv', newline='') as csvfile:
+    with open('/Users/NhatAnh/Documents/Study/4th Year/Project/Simulator/Hoang - preprocessing/weekday-summerAVG-1min-interval.csv', newline='') as csvfile:
         dataReader = csv.reader(csvfile, delimiter=';')
         for data in dataReader:
             Pmean = np.append(Pmean, [float(i) for i in data])
         Pmean[Pmean<0] = 0
 
-    with open('D:\Senior Year\Project\Simulator\Hoang - preprocessing\\weekday-summer-1min-interval.csv', newline='') as csvfile:
+    with open('/Users/NhatAnh/Documents/Study/4th Year/Project/Simulator/Hoang - preprocessing/weekday-summer-1min-interval.csv', newline='') as csvfile:
         dataReader = csv.reader(csvfile, delimiter=';')
         for data in dataReader:
             labels = np.append(labels, np.array([[float(i) for i in data]]))
