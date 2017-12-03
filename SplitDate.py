@@ -16,7 +16,7 @@ def whichday(date):
     return result
 
 
-filePath = "C:\\Users\\ngpbh\\Desktop\\Project\\household1\\01_plugs_csv\\01\\07\\"
+filePath = "D:\\Senior Year\\Project\\household 1\\01_plugs_csv\\01\\04\\"
 allFiles = os.listdir(filePath)
 
 weekdaySum = filePath + "weekday-summer\\"

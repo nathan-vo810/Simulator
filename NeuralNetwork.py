@@ -2,11 +2,12 @@ import numpy as np
 from numpy import exp, array, random, dot
 import json
 import csv
+from sklearn.preprocessing import normalize
 
 class NeuronLayer():
     def __init__(self, number_of_neurons, number_of_inputs_per_neuron):
-        self.synaptic_weights = 2 * random.random((number_of_inputs_per_neuron + 1, number_of_neurons )) - 1
-
+     #   self.synaptic_weights = 2 * random.random((number_of_inputs_per_neuron + 1, number_of_neurons )) - 1
+        self.synaptic_weights = 0.001* random.random((number_of_inputs_per_neuron + 1, number_of_neurons)) * np.sqrt(2/(number_of_inputs_per_neuron+number_of_neurons))
 
 class NeuralNetwork():
     def __init__(self, layer1, layer2):
@@ -25,8 +26,8 @@ class NeuralNetwork():
     # It indicates how confident we are about the existing weight.
     def __sigmoid_derivative(self, x):
         #return x * (1 - x)
-        x[x<0] = 0
-        x[x>=0] = 1
+        x[x<=0] = 0
+        x[x>0] = 1
         return x
     # We train the neural network through a process of trial and error.
     # Adjusting the synaptic weights each time.
@@ -71,21 +72,32 @@ if __name__ == "__main__":
     Pmean = []
 
     Pstart = []
+
+    labels = []
     with open('D:\Senior Year\Project\Simulator\Kettle\Kettle\weekend\Winter\p-start-daily.csv', newline='') as csvfile:
         dataReader = csv.reader(csvfile, delimiter=';')
         for data in dataReader:
             Pstart = np.append(Pstart, [float(i) for i in data])
-        print(Pstart[436])
-
     with open('D:\Senior Year\Project\Simulator\Hoang - preprocessing\\1 min interval\weekday-summer-avg-1min-energyconsumption.csv', newline='') as csvfile:
         dataReader = csv.reader(csvfile, delimiter=';')
         for data in dataReader:
             Pmean = np.append(Pmean, [float(i) for i in data])
-        print(np.size(Pmean))
+        Pmean[Pmean<0] = 0
 
-    print(np.vstack((Pstart, Pmean, time)).T)
+    with open('D:\Senior Year\Project\Simulator\Hoang - preprocessing\\weekday-summer-1min-interval.csv', newline='') as csvfile:
+        dataReader = csv.reader(csvfile, delimiter=';')
+        for data in dataReader:
+            labels = np.append(labels, np.array([[float(i) for i in data]]))
+        labels = array([labels]).T
+    features = np.vstack((Pstart, Pmean, time)).T
+    print(features)
+    features = normalize(features, axis = 0)
+    print(features)
+    print(labels)
+    labels = normalize(labels, axis = 0)
+    print(labels)
     #Seed the random number generator
-    random.seed(1)
+   # random.seed(1)
 
     # Create layer 1 (3 neurons, each with 3 inputs)
     layer1 = NeuronLayer(3, 3)
@@ -103,23 +115,26 @@ if __name__ == "__main__":
     # and 1 output value.
     training_set_inputs = array([[0, 0, 1], [0, 1, 1], [1, 0, 1], [0, 1, 0], [1, 0, 0], [1, 1, 1], [0, 0, 0]])
     training_set_outputs = array([[0, 1, 1, 1, 1, 0, 0]]).T
-
     # Train the neural network using the training set.
     # Do it 60,000 times and make small adjustments each time.
-    neural_network.train(training_set_inputs, training_set_outputs, 60000)
+    #neural_network.train(training_set_inputs, training_set_outputs, 60000)
+    neural_network.train(features, labels, 10000)
 
     print("Stage 2) New synaptic weights after training: ")
     neural_network.print_weights()
 
     # Test the neural network with a new situation.
     print("Stage 3) Considering a new situation [1, 1, 0] -> ?: ")
-    hidden_state, output = neural_network.think(array([[1, 0, 0]]))
+    #hidden_state, output = neural_network.think(array([[1, 0, 0]]))
+    hidden_state, output = neural_network.think(features)
     print(output)
 
     with open("jyp.txt", "w") as outfile:
         json.dump(neural_network.layer1.synaptic_weights.tolist(), outfile)
         outfile.close()
-
+    with open("jype.txt", "w") as outfile:
+        json.dump(output.tolist(), outfile)
+        outfile.close()
     with open("jyp.txt", "r") as infile:
         a = json.load(infile)
         b = np.array(a)

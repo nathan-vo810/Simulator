@@ -1,9 +1,11 @@
 import numpy as np
+from sklearn.preprocessing import normalize
 
-c = np.arange(1,1441)
 
-d = np.array([1,2,3])
+y = np.arange(1,7).reshape(2,3)
+print(y)
+norm2 = normalize(y, axis=0)
+print(norm2)
 
-Pstart = np.zeros([1,1440])
-Pstart = np.append(Pstart, 1)
-print(Pstart)
+z = normalize(np.array([[0.9, 1700, 100]]),axis=0)
+print(z)
