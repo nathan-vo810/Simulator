@@ -17,14 +17,17 @@ class NeuralNetwork():
     # We pass the weighted sum of the inputs through this function to
     # normalise them between 0 and 1.
     def __sigmoid(self, x):
-        return 1 / (1 + exp(-x))
-
+        #return 1 / (1 + exp(-x))
+        x[x<0] = 0
+        return x
     # The derivative of the Sigmoid function.
     # This is the gradient of the Sigmoid curve.
     # It indicates how confident we are about the existing weight.
     def __sigmoid_derivative(self, x):
-        return x * (1 - x)
-
+        #return x * (1 - x)
+        x[x<0] = 0
+        x[x>=0] = 1
+        return x
     # We train the neural network through a process of trial and error.
     # Adjusting the synaptic weights each time.
     def train(self, training_set_inputs, training_set_outputs, number_of_training_iterations):
@@ -65,8 +68,7 @@ class NeuralNetwork():
 if __name__ == "__main__":
 
     time = np.arange(1, 1441)
-
-    print(time)
+    Pmean = []
 
     Pstart = []
     with open('D:\Senior Year\Project\Simulator\Kettle\Kettle\weekend\Winter\p-start-daily.csv', newline='') as csvfile:
@@ -74,6 +76,14 @@ if __name__ == "__main__":
         for data in dataReader:
             Pstart = np.append(Pstart, [float(i) for i in data])
         print(Pstart[436])
+
+    with open('D:\Senior Year\Project\Simulator\Hoang - preprocessing\\1 min interval\weekday-summer-avg-1min-energyconsumption.csv', newline='') as csvfile:
+        dataReader = csv.reader(csvfile, delimiter=';')
+        for data in dataReader:
+            Pmean = np.append(Pmean, [float(i) for i in data])
+        print(np.size(Pmean))
+
+    print(np.vstack((Pstart, Pmean, time)).T)
     #Seed the random number generator
     random.seed(1)
 
