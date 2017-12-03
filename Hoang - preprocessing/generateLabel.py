@@ -10,10 +10,10 @@ eachMinuteConsumption = []
 
 filePath = "C:\\Users\\ngpbh\\PycharmProjects\\Simulator - Copy\\each-appliance-ec\\kettle\\"
 
-weekendWinter = "weekend\\Winter\\"
-weekendSummer = "weekend\\Summer\\"
-weekdayWinter = "weekday\\Winter\\"
-weekdaySummer = "weekday\\Summer\\"
+weekendWinter = "weekend-winter\\"
+weekendSummer = "weekend-summer\\"
+weekdayWinter = "weekday-winter\\"
+weekdaySummer = "weekday-summer\\"
 
 classifySeasonAndDate = [weekdayWinter, weekdaySummer, weekendSummer, weekendWinter]
 

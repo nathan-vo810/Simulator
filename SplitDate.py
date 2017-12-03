@@ -16,22 +16,22 @@ def whichday(date):
     return result
 
 
-filePath = "C:\\Users\\ngpbh\\Desktop\\Project\\household 1\\01_plugs_csv\\02"
+filePath = "C:\\Users\\ngpbh\\Desktop\\Project\\household1\\01_plugs_csv\\01\\07\\"
 allFiles = os.listdir(filePath)
 
-weekdaySum = filePath + "weekday-summer/"
+weekdaySum = filePath + "weekday-summer\\"
 if not os.path.exists(weekdaySum):
     os.makedirs(weekdaySum)
 
-weekdayWin = filePath + "weekday-winter/"
+weekdayWin = filePath + "weekday-winter\\"
 if not os.path.exists(weekdayWin):
     os.makedirs(weekdayWin)
 
-weekendSum = filePath + "weekend-summer/"
+weekendSum = filePath + "weekend-summer\\"
 if not os.path.exists(weekendSum):
     os.makedirs(weekendSum)
 
-weekendWin = filePath + "weekend-winter/"
+weekendWin = filePath + "weekend-winter\\"
 if not os.path.exists(weekendWin):
     os.makedirs(weekendWin)
 
