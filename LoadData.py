@@ -4,6 +4,12 @@ import matplotlib.pyplot as plt
 
 x = np.arange(0,144,1)
 data2 = []
+cunt = []
+
+cunt.append([2,2])
+cunt.append([2,2])
+
+print(cunt)
 # with open('2012-06-01.csv', newline='') as csvfile:
 #     dataReader = csv.reader(csvfile)
 #     for data in dataReader:
