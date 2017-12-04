@@ -5,9 +5,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-x = np.arange(0, 1439, 1)
+x = np.arange(0, 1440, 1)
 
-filePath = "C:\\Users\\ngpbh\Desktop\Project\household1\\01_plugs_csv\\01\\04\\"
+filePath = "D:\Senior Year\Project\household 1\\01_plugs_csv\\01\\04\\"
 
 weekendWinter = "weekend-winter\\"
 weekendSummer = "weekend-summer\\"
@@ -42,6 +42,10 @@ for seasonAndDate in classifySeasonAndDate:
                     counterFor60Secs += 1
         counterFor1440Minute = 0
     minutelyConsumption = [minute/allWeekendFiles.__len__() for minute in minutelyConsumption]
+    plt.plot(x,minutelyConsumption)
+    plt.xlabel('Time (1 minutes)')
+    plt.ylabel('Probability')
+    plt.show()
     print("Creating in 1 min interval: ", fileurl, "...")
     with open(outputUrl, "w") as output:
         writer = csv.writer(output, lineterminator='\n')

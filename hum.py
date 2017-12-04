@@ -1,11 +1,8 @@
-import numpy as np
-from sklearn.preprocessing import normalize
+from sklearn.neural_network import MLPRegressor
+X = [[0., 0.], [1., 1.]]
+y = [0, 1]
+clf = MLPRegressor(solver='lbfgs', alpha=1e-5,
+                    hidden_layer_sizes=(7, ), random_state=1)
 
-
-y = np.arange(1,7).reshape(2,3)
-print(y)
-norm2 = normalize(y, axis=0)
-print(norm2)
-
-z = normalize(np.array([[0.9, 1700, 100]]),axis=0)
-print(z)
+clf.fit(X, y)                         
+print(clf.predict([[2., 2.], [-1., -2.]]))
