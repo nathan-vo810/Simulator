@@ -77,21 +77,21 @@ if __name__ == "__main__":
     Pstart = []
 
     labels = []
-    with open('D:\Senior Year\Project\Simulator\Kettle\\Kettle\\weekday\\Summer\p-start-daily.csv', newline='') as csvfile:
+    with open('D:\Senior Year\Project\Simulator\Preprocessed Data\\01\we-sum\p-start-daily.csv', newline='') as csvfile:
         dataReader = csv.reader(csvfile, delimiter=';')
         for data in dataReader:
             Pstart = np.append(Pstart, [float(i) for i in data])
         #Pstart = array([Pstart])
-    with open('D:\Senior Year\Project\Simulator\Hoang - preprocessing\weekday-summerAVG-1min-interval.csv', newline='') as csvfile:
+    with open('D:\Senior Year\Project\Simulator\Preprocessed Data\\01\weekend-summerAVG-1min-interval.csv', newline='') as csvfile:
         dataReader = csv.reader(csvfile, delimiter=';')
         for data in dataReader:
             Pmean = np.append(Pmean, [float(i) for i in data])
-        Pmean = array([Pmean])
-    with open('D:\Senior Year\Project\Simulator\Hoang - preprocessing\weekday-summer-1min-interval.csv', newline='') as csvfile:
+        #Pmean = array([Pmean])
+    with open('D:\Senior Year\Project\Simulator\Preprocessed Data\\01\weekend-summer-1min-interval.csv', newline='') as csvfile:
         dataReader = csv.reader(csvfile, delimiter=';')
         for data in dataReader:
             labels = np.append(labels, np.array([[float(i) for i in data]]))
-        #labels = array([labels])
+        labels = array([labels])
 
     # features = np.vstack((Pmean, time)).T
     # Pstart = array([Pstart]).T
@@ -151,10 +151,10 @@ if __name__ == "__main__":
                        hidden_layer_sizes=(3,), random_state=1, max_iter=20)
     print(np.size(Pstart.T), np.size(labels.T), np.size(time.T))
     print(Pstart, labels, time)
-    features = np.vstack((Pstart, labels, time))
+    features = np.vstack((Pstart, Pmean, time))
     features = normalize(features.T, axis=0)
-    Pmean = normalize(Pmean.T, axis = 0)
-    clf.fit(features, Pmean)
+    labels = normalize(labels.T, axis = 0)
+    clf.fit(features, labels)
     output = clf.predict(features)
     print(max(output))
     with open("jype.txt", "w") as outfile:
@@ -163,7 +163,7 @@ if __name__ == "__main__":
     output[output <0] = 0
     print(output)
     plt.plot(time,output)
-    plt.plot(time, Pmean)
+    plt.plot(time, labels)
     plt.legend(['Predicted', 'Actual mean'])
     plt.xlabel('Time (1 minutes)')
     plt.ylabel('Energy')
