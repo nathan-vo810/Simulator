@@ -1,9 +1,10 @@
 from random import uniform
 
-import const
 from ApplianceCycle import WashingMachineCycle
 from ApplianceProfile import ApplianceProfile
 from DailyFrequency import DailyFrequency
+
+import const
 
 
 class Appliance:

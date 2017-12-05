@@ -1,14 +1,14 @@
 import argparse
+from time import gmtime, strftime
 
 import Plotter
-import const
-from time import gmtime, strftime
 from Appliance import WashingMachine
-from DataWriter import DataWriter
 from OccupancyModel import OccupancyModel
 from Output import Output
 from input import Input
 
+import const
+from DataWriter import DataWriter
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
