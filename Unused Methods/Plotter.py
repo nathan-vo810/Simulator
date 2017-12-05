@@ -1,8 +1,7 @@
 
+import DataReader
 import matplotlib.pyplot as plt
 import numpy as np
-
-import DataReader
 
 
 def plot(fileName, columnLevel):

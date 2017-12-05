@@ -5,6 +5,8 @@ import csv
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import normalize
 
+import const
+
 
 class Main:
     @staticmethod
@@ -41,47 +43,123 @@ class Main:
             thirdFileUrl = applianceFolderPath + '\\' + seasonAndDate.__str__()[2:16] + '-1min-interval.csv'
 
             time = np.arange(1, 1441)
-            Pmean = []
+            if appliancesFolder == '04':
+                Pstart = []
+                output = []
+                labels = []
+                with open(firstFileUrl,
+                          newline='') as csvfile:
+                    dataReader = csv.reader(csvfile, delimiter=';')
+                    for data in dataReader:
+                        Pstart = np.append(Pstart, [float(i) for i in data])
 
-            Pstart = []
+                # poissonDistribution = np.random.poisson(lam=(100., 500.), size=(100, 2))
 
-            labels = []
-            with open(firstFileUrl,
-                      newline='') as csvfile:
-                dataReader = csv.reader(csvfile, delimiter=';')
-                for data in dataReader:
-                    Pstart = np.append(Pstart, [float(i) for i in data])
-                    # Pstart = array([Pstart])
-            with open(secondFileUrl,
-                      newline='') as csvfile:
-                dataReader = csv.reader(csvfile, delimiter=';')
-                for data in dataReader:
-                    Pmean = np.append(Pmean, [float(i) for i in data])
-                Pmean = np.array([Pmean])
-            with open(thirdFileUrl,
-                      newline='') as csvfile:
-                dataReader = csv.reader(csvfile, delimiter=';')
-                for data in dataReader:
-                    labels = np.append(labels, np.array([[float(i) for i in data]]))
-                labels = np.array([labels])
+                powerOnConsumption = {
+                    'weekend-summer': const.Const.KETTLE_WEEKEND_SUMMER_AVERAGE_DAILY_ON_POWER,
+                    'weekend-winter': const.Const.KETTLE_WEEKEND_WINTER_AVERAGE_DAILY_ON_POWER,
+                    'weekday-summer': const.Const.KETTLE_WEEKDAY_SUMMER_AVERAGE_DAILY_ON_POWER,
+                    'weekday-winter': const.Const.KETTLE_WEEKDAY_WINTER_AVERAGE_DAILY_ON_POWER
+                }[seasonAndDate.__str__()[2:16]]
 
-            clf = MLPRegressor(solver='sgd', alpha=1e-5,
-                               hidden_layer_sizes=(3,), random_state=1, max_iter=20)
-            print(np.size(Pstart.T), np.size(labels.T), np.size(time.T))
-            print(Pstart, labels, time)
-            # temp = Pmean
-            # Pmean = labels
-            # labels = temp
-            features = np.vstack((Pstart, Pmean, time))
-            features = normalize(features.T, axis=0)
-            labels = normalize(labels.T, axis=0)
-            clf.fit(features, labels)
-            output = clf.predict(features)
-            print(max(output))
-            with open("jype.txt", "w") as outfile:
-                json.dump(output.tolist(), outfile)
-                outfile.close()
-            output[output < 0] = 0
+                useFrequency = {
+                    'weekend-summer': const.Const.KETTLE_WEEKDAY_SUMMER_AVERAGE_DAILY_USE_TIME,
+                    'weekend-winter': const.Const.KETTLE_WEEKEND_WINTER_AVERAGE_DAILY_USE_TIME,
+                    'weekday-summer': const.Const.KETTLE_WEEKDAY_SUMMER_AVERAGE_DAILY_USE_TIME,
+                    'weekday-winter': const.Const.KETTLE_WEEKDAY_WINTER_AVERAGE_DAILY_USE_TIME
+                }[seasonAndDate.__str__()[2:16]]
+
+                useTime = {
+                    'weekend-summer': const.Const.KETTLE_WEEKDAY_SUMMER_AVERAGE_DAILY_TIME_USE,
+                    'weekend-winter': const.Const.KETTLE_WEEKEND_WINTER_AVERAGE_DAILY_TIME_USE,
+                    'weekday-summer': const.Const.KETTLE_WEEKDAY_SUMMER_AVERAGE_DAILY_TIME_USE,
+                    'weekday-winter': const.Const.KETTLE_WEEKDAY_WINTER_AVERAGE_DAILY_TIME_USE
+                }[seasonAndDate.__str__()[2:16]]
+
+                probeFactor = 1
+                currentUseTime = 0
+                for dailyminute in Pstart:
+                    if currentUseTime > 0:
+                        if currentUseTime > 60:
+                            output.append(powerOnConsumption * 60)
+                        else:
+                            output.append(powerOnConsumption * currentUseTime)
+                        currentUseTime -= 60
+                    else:
+                        if probeFactor < 1:
+                            probeFactor += 0.15
+                        randomProbabilityStart = probeFactor * np.random.uniform(0.5, 1)
+                        if dailyminute > randomProbabilityStart:
+                            if useFrequency > 0:
+                                currentUseTime = useTime
+                                if currentUseTime > 60:
+                                    output.append(powerOnConsumption * 60)
+                                else:
+                                    output.append(powerOnConsumption * currentUseTime)
+                                currentUseTime -= 60
+                                useFrequency -= 1
+                            else:
+                                output.append(0)
+                        else:
+                            output.append(0)
+
+                with open(thirdFileUrl,
+                          newline='') as csvfile:
+                    dataReader = csv.reader(csvfile, delimiter=';')
+                    for data in dataReader:
+                        labels.append([float(i) for i in data])
+
+                print(output)
+                print(labels)
+                plt.plot(time, output)
+                plt.plot(time, labels)
+                plt.legend(['Predicted', 'Actual mean'])
+                plt.xlabel('Time (1 minutes)')
+                plt.ylabel('Energy')
+
+
+            else:
+                Pmean = []
+
+                Pstart = []
+
+                labels = []
+                with open(firstFileUrl,
+                          newline='') as csvfile:
+                    dataReader = csv.reader(csvfile, delimiter=';')
+                    for data in dataReader:
+                        Pstart = np.append(Pstart, [float(i) for i in data])
+                        # Pstart = array([Pstart])
+                with open(secondFileUrl,
+                          newline='') as csvfile:
+                    dataReader = csv.reader(csvfile, delimiter=';')
+                    for data in dataReader:
+                        Pmean = np.append(Pmean, [float(i) for i in data])
+                    Pmean = np.array([Pmean])
+                with open(thirdFileUrl,
+                          newline='') as csvfile:
+                    dataReader = csv.reader(csvfile, delimiter=';')
+                    for data in dataReader:
+                        labels = np.append(labels, np.array([[float(i) for i in data]]))
+                    labels = np.array([labels])
+
+                clf = MLPRegressor(solver='sgd', alpha=1e-5,
+                                   hidden_layer_sizes=(3,), random_state=1, max_iter=20)
+                print(np.size(Pstart.T), np.size(labels.T), np.size(time.T))
+                print(Pstart, labels, time)
+                # temp = Pmean
+                # Pmean = labels
+                # labels = temp
+                features = np.vstack((Pstart, Pmean, time))
+                features = normalize(features.T, axis=0)
+                labels = normalize(labels.T, axis=0)
+                clf.fit(features, labels)
+                output = clf.predict(features)
+                print(max(output))
+                with open("jype.txt", "w") as outfile:
+                    json.dump(output.tolist(), outfile)
+                    outfile.close()
+                output[output < 0] = 0
             print(output)
             plt.plot(time, output)
             plt.plot(time, labels)
@@ -91,4 +169,4 @@ class Main:
 
         plt.show()
 
-            # a = Pstart * Pmean.T
+        # a = Pstart * Pmean.T
