@@ -145,8 +145,8 @@ class Main:
                     labels = np.array([labels])
 
             clf = MLPRegressor(solver='lbfgs', alpha=1e-5,
-                               hidden_layer_sizes=(3,3), random_state=1, max_iter=10000)
-            print(np.size(Pstart.T), np.size(labels.T), np.size(time.T))
+                               hidden_layer_sizes=(7,7), random_state=1, max_iter=10000)
+            #print(np.size(Pstart.T), np.size(labels.T), np.size(time.T))
             print(Pstart, labels, time)
             # temp = Pmean
             # Pmean = labels
