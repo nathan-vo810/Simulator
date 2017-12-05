@@ -77,17 +77,17 @@ if __name__ == "__main__":
     Pstart = []
 
     labels = []
-    with open('D:\Senior Year\Project\Simulator\Preprocessed Data\\02\wd-win\p-start-daily.csv', newline='') as csvfile:
+    with open('D:\Senior Year\Project\Simulator\Preprocessed Data\\05\wd-sum\p-start-daily.csv', newline='') as csvfile:
         dataReader = csv.reader(csvfile, delimiter=';')
         for data in dataReader:
             Pstart = np.append(Pstart, [float(i) for i in data])
         #Pstart = array([Pstart])
-    with open('D:\Senior Year\Project\Simulator\Preprocessed Data\\02\weekday-winterAVG-1min-interval.csv', newline='') as csvfile:
+    with open('D:\Senior Year\Project\Simulator\Preprocessed Data\\05\weekday-summerAVG-1min-interval.csv', newline='') as csvfile:
         dataReader = csv.reader(csvfile, delimiter=';')
         for data in dataReader:
             Pmean = np.append(Pmean, [float(i) for i in data])
         Pmean = array([Pmean])
-    with open('D:\Senior Year\Project\Simulator\Preprocessed Data\\02\weekday-winter-1min-interval.csv', newline='') as csvfile:
+    with open('D:\Senior Year\Project\Simulator\Preprocessed Data\\05\weekday-summer-1min-interval.csv', newline='') as csvfile:
         dataReader = csv.reader(csvfile, delimiter=';')
         for data in dataReader:
             labels = np.append(labels, np.array([[float(i) for i in data]]))
@@ -147,8 +147,8 @@ if __name__ == "__main__":
 
 
 
-    clf = MLPRegressor(solver='sgd', alpha=1e-5,
-                       hidden_layer_sizes=(3,), random_state=1, max_iter=20)
+    clf = MLPRegressor(solver='adam', alpha=1e-5,
+                       hidden_layer_sizes=(3,), random_state=1, max_iter=10000)
     print(np.size(Pstart.T), np.size(labels.T), np.size(time.T))
     print(Pstart, labels, time)
     # temp = Pmean
