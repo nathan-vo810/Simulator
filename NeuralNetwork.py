@@ -77,17 +77,17 @@ if __name__ == "__main__":
     Pstart = []
 
     labels = []
-    with open('D:\Senior Year\Project\Simulator\Preprocessed Data\\01\we-sum\p-start-daily.csv', newline='') as csvfile:
+    with open('D:\Senior Year\Project\Simulator\Preprocessed Data\\02\wd-win\p-start-daily.csv', newline='') as csvfile:
         dataReader = csv.reader(csvfile, delimiter=';')
         for data in dataReader:
             Pstart = np.append(Pstart, [float(i) for i in data])
         #Pstart = array([Pstart])
-    with open('D:\Senior Year\Project\Simulator\Preprocessed Data\\01\weekend-summerAVG-1min-interval.csv', newline='') as csvfile:
+    with open('D:\Senior Year\Project\Simulator\Preprocessed Data\\02\weekday-winterAVG-1min-interval.csv', newline='') as csvfile:
         dataReader = csv.reader(csvfile, delimiter=';')
         for data in dataReader:
             Pmean = np.append(Pmean, [float(i) for i in data])
-        #Pmean = array([Pmean])
-    with open('D:\Senior Year\Project\Simulator\Preprocessed Data\\01\weekend-summer-1min-interval.csv', newline='') as csvfile:
+        Pmean = array([Pmean])
+    with open('D:\Senior Year\Project\Simulator\Preprocessed Data\\02\weekday-winter-1min-interval.csv', newline='') as csvfile:
         dataReader = csv.reader(csvfile, delimiter=';')
         for data in dataReader:
             labels = np.append(labels, np.array([[float(i) for i in data]]))
@@ -151,6 +151,9 @@ if __name__ == "__main__":
                        hidden_layer_sizes=(3,), random_state=1, max_iter=20)
     print(np.size(Pstart.T), np.size(labels.T), np.size(time.T))
     print(Pstart, labels, time)
+    # temp = Pmean
+    # Pmean = labels
+    # labels = temp
     features = np.vstack((Pstart, Pmean, time))
     features = normalize(features.T, axis=0)
     labels = normalize(labels.T, axis = 0)
