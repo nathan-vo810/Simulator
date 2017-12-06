@@ -89,8 +89,8 @@ class Main:
                             probeFactor = 2
                         currentUseTime -= 60
                     else:
-                        if probeFactor < 1:
-                            probeFactor -= 0.09
+                        if probeFactor > 1:
+                            probeFactor -= 0.01
                         randomProbabilityStart = probeFactor * np.random.uniform(0.8, 1)
                         if dailyminute > randomProbabilityStart:
                             if useFrequency > 0:
