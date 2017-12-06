@@ -45,13 +45,13 @@ def convertSeason(tog=[0]):
                             bg=Const.COLOR_RED)
         winterToogle.config(text=Const.SEASON_WINTER, state=NORMAL,
                             bg=Const.COLOR_LIGHTGREEN)
-        computerCheckbox.config(state=DISABLED, variable=IntVar(0))
+        # computerCheckbox.config(state=DISABLED, variable=IntVar(0))
     else:
         summerToogle.config(text=Const.SEASON_SUMMER, state=NORMAL,
                             bg=Const.COLOR_LIGHTGREEN)
         winterToogle.config(text='', state=DISABLED,
                             bg=Const.COLOR_RED)
-        computerCheckbox.config(state=NORMAL)
+        # computerCheckbox.config(state=NORMAL)
     tog[0] = not tog[0]
 
 
@@ -133,7 +133,7 @@ fridgeCheckbox = Checkbutton(applianceFrame,
 fridgeCheckbox.grid(row=2, column=2, sticky=W)
 computerCheckbox = Checkbutton(applianceFrame,
                                text=Const.APPLIANCE_COMPUTER, variable=isComputer,
-                               bg=Const.ROOT_COLOR, state=DISABLED)
+                               bg=Const.ROOT_COLOR)
 computerCheckbox.grid(row=2, column=3, sticky=W)
 washerCheckbox = Checkbutton(applianceFrame,
                              text=Const.APPLIANCE_WASHER, variable=isWasher,
@@ -151,8 +151,8 @@ def checkAll():
         for cb in checkboxs:
             cb.select()
             cb.config(state=DISABLED)
-            if cb == computerCheckbox and (winterToogle.cget('text') != '') is True:
-                cb.deselect()
+            # if cb == computerCheckbox and (winterToogle.cget('text') != '') is True:
+            #     cb.deselect()
     else:
         for cb in checkboxs:
             cb.deselect()
