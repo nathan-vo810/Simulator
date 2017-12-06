@@ -187,9 +187,10 @@ class Main:
                 # plt.xlabel('Time (1 minutes)')
                 # plt.ylabel('Energy')
 
-                expectTotalEnergyConsumption = [x + y for x, y in zip(expectTotalEnergyConsumption, oriLabels)]
-                actualTotalEnergyConsumption = [x + y for x, y in zip(actualTotalEnergyConsumption, output)]
+            expectTotalEnergyConsumption = [x + y for x, y in zip(expectTotalEnergyConsumption, output)]
+            actualTotalEnergyConsumption = [x + y for x, y in zip(actualTotalEnergyConsumption, oriLabels)]
 
+            print(expectTotalEnergyConsumption[0])
 
         # plt.subplot(211)
         plt.plot(time, expectTotalEnergyConsumption)

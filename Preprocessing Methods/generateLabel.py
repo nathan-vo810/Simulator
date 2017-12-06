@@ -8,14 +8,14 @@ import os
 x = np.arange(0, 1439, 1)
 eachMinuteConsumption = []
 
-filePath = "C:\\Users\\ngpbh\Desktop\Project\household1\\01_plugs_csv\\01\\04\\"
+filePath = "D:\\Senior Year\\Project\\household 1\\01_plugs_csv\\01\\05\\"
 
 weekendWinter = "weekend-winter\\"
-weekendSummer = "weekend-summer\\"
-weekdayWinter = "weekday-winter\\"
-weekdaySummer = "weekday-summer\\"
+# weekendSummer = "weekend-summer\\"
+# weekdayWinter = "weekday-winter\\"
+# weekdaySummer = "weekday-summer\\"
 
-classifySeasonAndDate = [weekdayWinter, weekdaySummer, weekendSummer, weekendWinter]
+classifySeasonAndDate = [weekendWinter]
 
 for seasonAndDate in classifySeasonAndDate:
     specificFilePath = filePath + seasonAndDate
@@ -23,7 +23,7 @@ for seasonAndDate in classifySeasonAndDate:
     fileName = allWeekendFiles[numpy.random.randint(0, allWeekendFiles.__len__())]
     fileurl = filePath + seasonAndDate + fileName
     print("Invetigating ", fileurl, "...")
-    outputUrl = seasonAndDate[:14] + "-1min-interval.csv"
+    outputUrl = "..\\Preprocessed Data\\05\\" + seasonAndDate[:14] + "-1min-interval.csv"
     with open(fileurl, newline='') as csvfile:
         dataReader = csv.reader(csvfile, delimiter=',')
         next(dataReader)
@@ -37,7 +37,7 @@ for seasonAndDate in classifySeasonAndDate:
             for i in data:
                 if float(i) > 0: minuteConsumption += float(i)
                 counter += 1
-    print("Creating in 1 min interval: ", fileurl, "...")
+    print("Creating in 1 min interval: ", outputUrl, "...")
     with open(outputUrl, "w") as output:
         writer = csv.writer(output, lineterminator='\n')
         eachMinuteConsumption.append(0)
