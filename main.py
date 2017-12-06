@@ -36,8 +36,8 @@ class Main:
             }[season]
         }
 
-        actualTotalEnergyConsumption = [0] * 1440
-        expectTotalEnergyConsumption = [0] * 1440
+        actualTotalEnergyConsumption = [float(0.0)] * 1440
+        expectTotalEnergyConsumption = [float(0.0)] * 1440
 
         for appliancesFolder in appliancesFolders:
 
@@ -48,7 +48,6 @@ class Main:
 
             time = np.arange(1, 1441)
             if appliancesFolder == '04':
-                print('sad')
                 Pstart = []
                 output = []
                 labels = []
@@ -75,7 +74,7 @@ class Main:
                 }[seasonAndDate.__str__()[2:16]]
 
                 useTime = {
-                    'weekend-summer': const.Const.KETTLE_WEEKDAY_SUMMER_AVERAGE_DAILY_TIME_USE,
+                    'weekend-summer': const.Const.KETTLE_WEEKEND_SUMMER_AVERAGE_DAILY_TIME_USE,
                     'weekend-winter': const.Const.KETTLE_WEEKEND_WINTER_AVERAGE_DAILY_TIME_USE,
                     'weekday-summer': const.Const.KETTLE_WEEKDAY_SUMMER_AVERAGE_DAILY_TIME_USE,
                     'weekday-winter': const.Const.KETTLE_WEEKDAY_WINTER_AVERAGE_DAILY_TIME_USE
@@ -114,8 +113,9 @@ class Main:
                           newline='') as csvfile:
                     dataReader = csv.reader(csvfile, delimiter=';')
                     for data in dataReader:
-                        labels.append([float(i) for i in data])
-
+                        labels = np.append(labels, np.array([[float(i) for i in data]]))
+                    labels = np.array([labels])
+                oriLabels = labels.T
                 # print(output)
                 # print(labels)
                 # plt.plot(time, output)
@@ -123,6 +123,9 @@ class Main:
                 # plt.legend(['Predicted', 'Actual mean'])
                 # plt.xlabel('Time (1 minutes)')
                 # plt.ylabel('Energy')
+                print(labels)
+                expectTotalEnergyConsumption = [x + y for x, y in zip(expectTotalEnergyConsumption, oriLabels)]
+                actualTotalEnergyConsumption = [x + y for x, y in zip(actualTotalEnergyConsumption, output)]
 
 
             else:
@@ -184,12 +187,13 @@ class Main:
                 # plt.xlabel('Time (1 minutes)')
                 # plt.ylabel('Energy')
 
-            expectTotalEnergyConsumption = [x + y for x, y in zip(expectTotalEnergyConsumption, oriLabels)]
-            actualTotalEnergyConsumption = [x + y for x, y in zip(actualTotalEnergyConsumption, output)]
+                expectTotalEnergyConsumption = [x + y for x, y in zip(expectTotalEnergyConsumption, oriLabels)]
+                actualTotalEnergyConsumption = [x + y for x, y in zip(actualTotalEnergyConsumption, output)]
 
-            print(expectTotalEnergyConsumption[0])
 
+        # plt.subplot(211)
         plt.plot(time, expectTotalEnergyConsumption)
+        # plt.subplot(212)
         plt.plot(time, actualTotalEnergyConsumption)
         plt.legend(['Predicted', 'Actual mean'])
         plt.xlabel('Time (1 minutes)')
