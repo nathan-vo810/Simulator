@@ -127,7 +127,7 @@ class Main:
                 expectTotalEnergyConsumption = [x + y for x, y in zip(expectTotalEnergyConsumption, oriLabels)]
                 actualTotalEnergyConsumption = [x + y for x, y in zip(actualTotalEnergyConsumption, output)]
 
-
+                #lamsaothilam
             else:
                 Pmean = []
 
