@@ -194,9 +194,9 @@ class Main:
         plt.plot(time, expectTotalEnergyConsumption)
         # plt.subplot(212)
         plt.plot(time, actualTotalEnergyConsumption)
-        plt.legend(['Predicted', 'Actual mean'])
-        plt.xlabel('Time (1 minutes)')
-        plt.ylabel('Energy')
+        plt.legend(['Simulated consumption', 'Actual consumption'])
+        plt.xlabel('Time (minute)')
+        plt.ylabel('Energy (W)')
         plt.show()
 
     # a = Pstart * Pmean.T
