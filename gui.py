@@ -133,7 +133,7 @@ fridgeCheckbox = Checkbutton(applianceFrame,
 fridgeCheckbox.grid(row=2, column=2, sticky=W)
 computerCheckbox = Checkbutton(applianceFrame,
                                text=Const.APPLIANCE_COMPUTER, variable=isComputer,
-                               bg=Const.ROOT_COLOR)
+                               bg=Const.ROOT_COLOR, state=DISABLED)
 computerCheckbox.grid(row=2, column=3, sticky=W)
 washerCheckbox = Checkbutton(applianceFrame,
                              text=Const.APPLIANCE_WASHER, variable=isWasher,

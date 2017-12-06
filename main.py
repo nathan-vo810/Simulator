@@ -45,6 +45,7 @@ class Main:
 
             time = np.arange(1, 1441)
             if appliancesFolder == '04':
+                print('sad')
                 Pstart = []
                 output = []
                 labels = []
@@ -85,11 +86,12 @@ class Main:
                             output.append(powerOnConsumption * 60)
                         else:
                             output.append(powerOnConsumption * currentUseTime)
+                            probeFactor = 2
                         currentUseTime -= 60
                     else:
                         if probeFactor < 1:
-                            probeFactor += 0.15
-                        randomProbabilityStart = probeFactor * np.random.uniform(0.5, 1)
+                            probeFactor -= 0.09
+                        randomProbabilityStart = probeFactor * np.random.uniform(0.8, 1)
                         if dailyminute > randomProbabilityStart:
                             if useFrequency > 0:
                                 currentUseTime = useTime
@@ -97,6 +99,7 @@ class Main:
                                     output.append(powerOnConsumption * 60)
                                 else:
                                     output.append(powerOnConsumption * currentUseTime)
+                                    probeFactor = 2
                                 currentUseTime -= 60
                                 useFrequency -= 1
                             else:
@@ -144,40 +147,40 @@ class Main:
                         labels = np.append(labels, np.array([[float(i) for i in data]]))
                     labels = np.array([labels])
 
-            clf = MLPRegressor(solver='lbfgs', alpha=1e-5,
-                               hidden_layer_sizes=(7,7), random_state=1, max_iter=10000)
-            #print(np.size(Pstart.T), np.size(labels.T), np.size(time.T))
-            print(Pstart, labels, time)
-            # temp = Pmean
-            # Pmean = labels
-            # labels = temp
-            features = np.vstack((Pstart, Pmean, time))
-            scaler = MinMaxScaler(feature_range=(0, 1))
-            features = scaler.fit_transform(features.T)
-        #   features = normalize(features.T, axis=0)
-            oriLabels = labels.T
-            maxSca = np.max(labels)
-            minSca = np.min(labels)
-        #    labels = normalize(labels.T, axis=0)
-            labels = scaler.fit_transform(labels.T)
-            print(min(labels), max(labels))
-            clf.fit(features, labels)
-            output = clf.predict(features)
-            print(maxSca, minSca)
-            output = maxSca*output
-            labels = maxSca*labels
-            print(max(output), max(labels))
-            with open("jype.txt", "w") as outfile:
-                json.dump(output.tolist(), outfile)
-                outfile.close()
-            output[output < 0] = 0
-            print(output)
-            plt.plot(time, output)
-            plt.plot(time, oriLabels)
-            plt.legend(['Predicted', 'Actual mean'])
-            plt.xlabel('Time (1 minutes)')
-            plt.ylabel('Energy')
+                clf = MLPRegressor(solver='lbfgs', alpha=1e-5,
+                                   hidden_layer_sizes=(7, 7), random_state=1, max_iter=10000)
+                # print(np.size(Pstart.T), np.size(labels.T), np.size(time.T))
+                print(Pstart, labels, time)
+                # temp = Pmean
+                # Pmean = labels
+                # labels = temp
+                features = np.vstack((Pstart, Pmean, time))
+                scaler = MinMaxScaler(feature_range=(0, 1))
+                features = scaler.fit_transform(features.T)
+                #   features = normalize(features.T, axis=0)
+                oriLabels = labels.T
+                maxSca = np.max(labels)
+                minSca = np.min(labels)
+                #    labels = normalize(labels.T, axis=0)
+                labels = scaler.fit_transform(labels.T)
+                print(min(labels), max(labels))
+                clf.fit(features, labels)
+                output = clf.predict(features)
+                print(maxSca, minSca)
+                output = maxSca * output
+                labels = maxSca * labels
+                print(max(output), max(labels))
+                with open("jype.txt", "w") as outfile:
+                    json.dump(output.tolist(), outfile)
+                    outfile.close()
+                output[output < 0] = 0
+                print(output)
+                plt.plot(time, output)
+                plt.plot(time, oriLabels)
+                plt.legend(['Predicted', 'Actual mean'])
+                plt.xlabel('Time (1 minutes)')
+                plt.ylabel('Energy')
 
         plt.show()
 
-            # a = Pstart * Pmean.T
+        # a = Pstart * Pmean.T
