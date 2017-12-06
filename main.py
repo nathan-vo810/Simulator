@@ -3,7 +3,6 @@ from sklearn.neural_network import MLPRegressor
 import json
 import csv
 import matplotlib.pyplot as plt
-from sklearn.preprocessing import normalize
 from sklearn.preprocessing import MinMaxScaler
 
 import const
@@ -37,7 +36,11 @@ class Main:
             }[season]
         }
 
+        actualTotalEnergyConsumption = [0] * 1440
+        expectTotalEnergyConsumption = [0] * 1440
+
         for appliancesFolder in appliancesFolders:
+
             applianceFolderPath = filePath + appliancesFolder
             firstFileUrl = applianceFolderPath + '\\' + seasonAndDate.__str__()[2:16] + '\p-start-daily.csv'
             secondFileUrl = applianceFolderPath + '\\' + seasonAndDate.__str__()[2:16] + 'AVG-1min-interval.csv'
@@ -65,7 +68,7 @@ class Main:
                 }[seasonAndDate.__str__()[2:16]]
 
                 useFrequency = {
-                    'weekend-summer': const.Const.KETTLE_WEEKDAY_SUMMER_AVERAGE_DAILY_USE_TIME,
+                    'weekend-summer': const.Const.KETTLE_WEEKEND_SUMMER_AVERAGE_DAILY_USE_TIME,
                     'weekend-winter': const.Const.KETTLE_WEEKEND_WINTER_AVERAGE_DAILY_USE_TIME,
                     'weekday-summer': const.Const.KETTLE_WEEKDAY_SUMMER_AVERAGE_DAILY_USE_TIME,
                     'weekday-winter': const.Const.KETTLE_WEEKDAY_WINTER_AVERAGE_DAILY_USE_TIME
@@ -113,13 +116,13 @@ class Main:
                     for data in dataReader:
                         labels.append([float(i) for i in data])
 
-                print(output)
-                print(labels)
-                plt.plot(time, output)
-                plt.plot(time, labels)
-                plt.legend(['Predicted', 'Actual mean'])
-                plt.xlabel('Time (1 minutes)')
-                plt.ylabel('Energy')
+                # print(output)
+                # print(labels)
+                # plt.plot(time, output)
+                # plt.plot(time, labels)
+                # plt.legend(['Predicted', 'Actual mean'])
+                # plt.xlabel('Time (1 minutes)')
+                # plt.ylabel('Energy')
 
 
             else:
@@ -150,7 +153,7 @@ class Main:
                 clf = MLPRegressor(solver='lbfgs', alpha=1e-5,
                                    hidden_layer_sizes=(7, 7), random_state=1, max_iter=10000)
                 # print(np.size(Pstart.T), np.size(labels.T), np.size(time.T))
-                print(Pstart, labels, time)
+                # print(Pstart, labels, time)
                 # temp = Pmean
                 # Pmean = labels
                 # labels = temp
@@ -163,24 +166,34 @@ class Main:
                 minSca = np.min(labels)
                 #    labels = normalize(labels.T, axis=0)
                 labels = scaler.fit_transform(labels.T)
-                print(min(labels), max(labels))
+                # print(min(labels), max(labels))
                 clf.fit(features, labels)
                 output = clf.predict(features)
-                print(maxSca, minSca)
+                # print(maxSca, minSca)
                 output = maxSca * output
                 labels = maxSca * labels
-                print(max(output), max(labels))
+                # print(max(output), max(labels))
                 with open("jype.txt", "w") as outfile:
                     json.dump(output.tolist(), outfile)
                     outfile.close()
                 output[output < 0] = 0
-                print(output)
-                plt.plot(time, output)
-                plt.plot(time, oriLabels)
-                plt.legend(['Predicted', 'Actual mean'])
-                plt.xlabel('Time (1 minutes)')
-                plt.ylabel('Energy')
+                # print(output)
+                # plt.plot(time, output)
+                # plt.plot(time, oriLabels)
+                # plt.legend(['Predicted', 'Actual mean'])
+                # plt.xlabel('Time (1 minutes)')
+                # plt.ylabel('Energy')
 
+            expectTotalEnergyConsumption = [x + y for x, y in zip(expectTotalEnergyConsumption, oriLabels)]
+            actualTotalEnergyConsumption = [x + y for x, y in zip(actualTotalEnergyConsumption, output)]
+
+            print(expectTotalEnergyConsumption[0])
+
+        plt.plot(time, expectTotalEnergyConsumption)
+        plt.plot(time, actualTotalEnergyConsumption)
+        plt.legend(['Predicted', 'Actual mean'])
+        plt.xlabel('Time (1 minutes)')
+        plt.ylabel('Energy')
         plt.show()
 
-        # a = Pstart * Pmean.T
+    # a = Pstart * Pmean.T
