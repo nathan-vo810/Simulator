@@ -4,9 +4,11 @@ import numpy
 import numpy as np
 import os
 
-def generateLabel(filePath, seasonAndDateInput):
+def generateLabel(dataPath, seasonAndDateInput, preprocessPath):
     x = np.arange(0, 1439, 1)
     eachMinuteConsumption = []
+
+    filePath = dataPath + "\\"
 
     # filePath = "..\\Preprocessed Data\\05\\"
     #
@@ -16,16 +18,17 @@ def generateLabel(filePath, seasonAndDateInput):
     # # weekdaySummer = "weekday-summer\\"
     #
     # classifySeasonAndDate = [weekendWinter]
-    filePath = filePath[:-15]
     classifySeasonAndDate = [seasonAndDateInput]
 
     for seasonAndDate in classifySeasonAndDate:
-        specificFilePath = filePath + seasonAndDate
+        specificFilePath = filePath + seasonAndDate + "\\"
+        print(specificFilePath)
         allWeekendFiles = os.listdir(specificFilePath)
         fileName = allWeekendFiles[numpy.random.randint(0, allWeekendFiles.__len__())]
-        fileurl = filePath + seasonAndDate + fileName
+        print(preprocessPath)
+        fileurl = filePath + seasonAndDate + "\\" + fileName
         print("Invetigating ", fileurl, "...")
-        outputUrl = "..\\Preprocessed Data\\05\\" + seasonAndDate[:14] + "-1min-interval.csv"
+        outputUrl = preprocessPath + "\\" + seasonAndDate + "-1min-interval.csv"
         with open(fileurl, newline='') as csvfile:
             dataReader = csv.reader(csvfile, delimiter=',')
             next(dataReader)

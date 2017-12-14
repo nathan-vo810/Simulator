@@ -6,13 +6,14 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 
 import const
+import generateLabel
 
 
 class Main:
     @staticmethod
     def simulateData(season, dayType, appliances):
         filePath = '.\Preprocessed Data\\'
-
+        dataPath = '.\Data\\'
         appliancesFolders = []
         for appliance in appliances:
             appliancesFolders.append({
@@ -40,14 +41,15 @@ class Main:
         expectTotalEnergyConsumption = [float(0.0)] * 1440
 
         for appliancesFolder in appliancesFolders:
-
             applianceFolderPath = filePath + appliancesFolder
+            dataForlderPath = dataPath + appliancesFolder
+            generateLabel.generateLabel(dataForlderPath, seasonAndDate.__str__()[2:16], applianceFolderPath)
             firstFileUrl = applianceFolderPath + '\\' + seasonAndDate.__str__()[2:16] + '\p-start-daily.csv'
             secondFileUrl = applianceFolderPath + '\\' + seasonAndDate.__str__()[2:16] + 'AVG-1min-interval.csv'
             thirdFileUrl = applianceFolderPath + '\\' + seasonAndDate.__str__()[2:16] + '-1min-interval.csv'
 
             time = np.arange(1, 1441)
-            if appliancesFolder == '04':
+            if appliancesFolder == '01':
                 Pstart = []
                 output = []
                 labels = []
@@ -109,12 +111,13 @@ class Main:
                         else:
                             output.append(0)
 
-                with open(thirdFileUrl,
-                          newline='') as csvfile:
-                    dataReader = csv.reader(csvfile, delimiter=';')
-                    for data in dataReader:
-                        labels = np.append(labels, np.array([[float(i) for i in data]]))
-                    labels = np.array([labels])
+                # with open(thirdFileUrl,
+                #           newline='') as csvfile:
+                #     dataReader = csv.reader(csvfile, delimiter=';')
+                #     for data in dataReader:
+                #         labels = np.append(labels, np.array([[float(i) for i in data]]))
+                #     labels = np.array([labels])
+
                 oriLabels = labels.T
                 # print(output)
                 # print(labels)
