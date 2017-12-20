@@ -1,3 +1,4 @@
+import argparse
 import numpy as np
 from sklearn.neural_network import MLPRegressor
 import json
@@ -49,7 +50,7 @@ class Main:
             thirdFileUrl = applianceFolderPath + '\\' + seasonAndDate.__str__()[2:16] + '-1min-interval.csv'
 
             time = np.arange(1, 1441)
-            if appliancesFolder == '01':
+            if appliancesFolder == '04':
                 Pstart = []
                 output = []
                 labels = []
@@ -111,12 +112,12 @@ class Main:
                         else:
                             output.append(0)
 
-                # with open(thirdFileUrl,
-                #           newline='') as csvfile:
-                #     dataReader = csv.reader(csvfile, delimiter=';')
-                #     for data in dataReader:
-                #         labels = np.append(labels, np.array([[float(i) for i in data]]))
-                #     labels = np.array([labels])
+                with open(thirdFileUrl,
+                          newline='') as csvfile:
+                    dataReader = csv.reader(csvfile, delimiter=';')
+                    for data in dataReader:
+                        labels = np.append(labels, np.array([[float(i) for i in data]]))
+                    labels = np.array([labels])
 
                 oriLabels = labels.T
                 # print(output)
@@ -130,7 +131,7 @@ class Main:
                 expectTotalEnergyConsumption = [x + y for x, y in zip(expectTotalEnergyConsumption, output)]
                 actualTotalEnergyConsumption = [x + y for x, y in zip(actualTotalEnergyConsumption, oriLabels)]
 
-                #lamsaothilam
+                # lamsaothilam
             else:
                 Pmean = []
 
@@ -202,4 +203,45 @@ class Main:
         plt.ylabel('Energy (W)')
         plt.show()
 
-    # a = Pstart * Pmean.T
+        # a = Pstart * Pmean.T
+
+
+def main():
+    # create parser object
+    parser = argparse.ArgumentParser(description="A command line interface for Energy Consumption Simulator")
+
+    # defining arguments for parser object
+    parser.add_argument("-season", type=str, nargs=1,
+                        metavar="season", default=['winter'], choices={'summer', 'winter'},
+                        help="Choose the appropriate season (winter or summer)")
+
+    parser.add_argument("-daytype", type=str, nargs=1,
+                        metavar="daytype", default=['weekdays'], choices={'weekdays', 'weekends'},
+                        help="Choose the appropriate daytype (weekdays or weekends)")
+
+    parser.add_argument('appliances', metavar='appliance', type=str, nargs='+',
+                        help='Choose the list of appliances to simulate\n'
+                             'all or the name of appliances (i.e. Fridge, Kettle, PC, Washer, Dryer, Freezer',
+                        choices=['all', 'Fridge', 'Kettle', 'PC', 'Washer', 'Dryer', 'Freezer'])
+
+    # parse the arguments from standard input
+    args = parser.parse_args()
+    if args.season == ['winter'] or args.season == 'winter':
+        season = 1
+    else:
+        season = 0
+    if args.daytype == ['weekdays'] or args.season == 'weekdays':
+        dayType = 0
+    else:
+        dayType = 1
+    if args.appliances == ['all']:
+        appliances = ['Fridge', 'Kettle', 'PC', 'Washer', 'Dryer', 'Freezer']
+    else:
+        appliances = args.appliances
+
+    Main.simulateData(season, dayType, appliances)
+
+
+if __name__ == "__main__":
+    # calling the main function
+    main()
